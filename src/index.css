@@ -92,4 +92,26 @@
     min-width: 100% !important;
     height: auto !important;
   }
+  /* Garante que os cards do "Futuro" respirem */
+  .p-6, .p-8 {
+    min-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Força TODAS as grades (2, 3 ou 4 colunas) a virarem 1 única coluna no celular */
+  [class*="grid-cols-2"], [class*="grid-cols-3"], [class*="grid-cols-4"] {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Quebra os painéis que dividem a tela no meio (Draft, Analisador, Assistente) */
+  main .flex > div, .flex-row > div {
+    min-width: 100% !important;
+  }
+  
+  /* Remove larguras fixas que espremem o conteúdo */
+  .w-1\/2, .w-1\/3, .w-1\/4, .w-80, .w-96, .w-64 {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
 }
