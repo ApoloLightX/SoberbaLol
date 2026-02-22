@@ -35,3 +35,36 @@
 .card-hover {
   @apply hover:border-rift-accent/50 transition-colors cursor-pointer;
 }
+
+/* --- CORREÇÃO MOBILE SOBERBA RIFT --- */
+@media (max-width: 768px) {
+  /* Força a tela a empilhar os itens de cima para baixo em vez de lado a lado */
+  #root > div, body > div {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100vh !important;
+  }
+  
+  /* Faz o menu lateral (painel preto) ocupar a largura total e não esmagar a tela */
+  div[class*="w-64"], aside, nav {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+  }
+
+  /* Ajusta a grade dos campeões para caber certinho no dedo */
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)) !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Garante que o botão verde de gerar estratégia fique visível */
+  .btn-primary {
+    width: 100% !important;
+    margin-top: 1rem !important;
+  }
+}
