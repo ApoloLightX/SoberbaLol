@@ -147,17 +147,23 @@ export default function App() {
           label="Motor de Ouro"
         />
         <NavItem 
-          active={activeView === 'draft'} 
-          onClick={() => setActiveView('draft')}
-          icon={<Users size={20} />}
-          label="Simulador de Draft"
-        />
+    {activeView === 'draft' && (
+            <motion.div key="draft" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <DraftSimulator 
+                onAction={(data: any) => handleGetAdvice('teamcomp', data)} 
+                loading={loading} 
+              />
+            </motion.div>
+          )}
         <NavItem 
-          active={activeView === 'builder'} 
-          onClick={() => setActiveView('builder')}
-          icon={<Calculator size={20} />}
-          label="Construtor de Builds"
-        />
+    {activeView === 'builder' && (
+            <motion.div key="builder" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <BuildCalculator 
+                onAction={(data: any) => handleGetAdvice('gold', data)} 
+                loading={loading} 
+              />
+            </motion.div>
+          )}
         <NavItem 
           active={activeView === 'live'} 
           onClick={() => setActiveView('live')}
@@ -165,11 +171,14 @@ export default function App() {
           label="Assistente em Tempo Real"
         />
         <NavItem 
-          active={activeView === 'coach'} 
-          onClick={() => setActiveView('coach')}
-          icon={<Brain size={20} />}
-          label="Coach Pessoal IA"
-        />
+         {activeView === 'coach' && (
+            <motion.div key="coach" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <AICoach 
+                onAction={(prompt: string) => handleGetAdvice('custom', { prompt })} 
+                loading={loading} 
+              />
+            </motion.div>
+          )}
         
         <div className="my-4 border-t border-white/5"></div>
 
