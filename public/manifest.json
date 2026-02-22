@@ -14,7 +14,7 @@
       "purpose": "any maskable"
     },
     {
-      "src": "https://dummyimage.com/512x512/00ff88/050505.png",
+      "src": "/logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
