@@ -19,7 +19,8 @@ import {
   Timer,
   Menu,
   X,
-  Bug
+  Bug,
+  Flame
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import './styles/theme.css';
@@ -34,8 +35,9 @@ import AdaptiveBuilds from './components/AdaptiveBuilds';
 import MetaRoadmap from './components/MetaRoadmap';
 import DashboardV2 from './components/DashboardV2';
 import UIInspector from './components/UIInspector';
+import LegacyKiller from './components/LegacyKiller';
 
-type View = 'dashboard' | 'matchup' | 'gold' | 'teamcomp' | 'builds' | 'runes' | 'overview' | 'draft' | 'builder' | 'live' | 'coach' | 'adaptive' | 'inspector';
+type View = 'dashboard' | 'matchup' | 'gold' | 'teamcomp' | 'builds' | 'runes' | 'overview' | 'draft' | 'builder' | 'live' | 'coach' | 'adaptive' | 'inspector' | 'legacy';
 
 export default function App() {
   const [activeView, setActiveView] = useState<View>('dashboard');
@@ -88,8 +90,9 @@ export default function App() {
         <NavItem active={activeView === 'runes'} onClick={() => navigateTo('runes')} icon={<Zap size={18} />} label="Explorador de Runas" />
         <NavItem active={activeView === 'overview'} onClick={() => navigateTo('overview')} icon={<Target size={18} />} label="Roadmap / Meta" />
 
-        <div className="mt-8 border-t border-white/5 pt-4">
+        <div className="mt-8 border-t border-white/5 pt-4 space-y-1">
            <NavItem active={activeView === 'inspector'} onClick={() => navigateTo('inspector')} icon={<Bug size={18} />} label="UI Inspector" />
+           <NavItem active={activeView === 'legacy'} onClick={() => navigateTo('legacy')} icon={<Flame size={18} />} label="Legacy Killer" />
         </div>
 
         <div className="mt-auto p-4 glass-panel text-[10px] text-white/40">
@@ -112,6 +115,7 @@ export default function App() {
           {activeView === 'adaptive' && <AdaptiveBuilds />}
           {activeView === 'overview' && <MetaRoadmap />}
           {activeView === 'inspector' && <UIInspector />}
+          {activeView === 'legacy' && <LegacyKiller />}
           
           {/* Enhanced Matchup View with AI Integration */}
           {activeView === 'matchup' && (
