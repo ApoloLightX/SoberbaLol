@@ -82,7 +82,7 @@
   }
 
   /* Conserta as colunas finas do Simulador de Draft e Matchup */
-  div[class*="w-["], .w-1\\/2, .w-1\\/3, .w-1\\/4 {
+  div[class*="w-["], .w-1\/2, .w-1\/3, .w-1\/4 {
     width: 100% !important;
     max-width: 100% !important;
   }
