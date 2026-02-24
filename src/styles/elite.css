@@ -154,30 +154,45 @@ button:focus {
 
 /* INPUTS */
 input, select, textarea {
-  background: var(--white-10);
-  border: 1px solid var(--white-20);
+  background: rgba(38, 136, 242, 0.08);
+  border: 2px solid var(--white-30);
   color: var(--light);
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
+  padding: 0.875rem 1rem;
+  border-radius: 10px;
   font-family: 'Inter', sans-serif;
   font-size: 0.9375rem;
   transition: all 0.2s ease;
   width: 100%;
+  font-weight: 500;
 }
 
 input:hover, select:hover, textarea:hover {
-  border-color: var(--white-30);
+  background: rgba(38, 136, 242, 0.12);
+  border-color: var(--primary);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.1);
 }
 
 input:focus, select:focus, textarea:focus {
   outline: none;
-  background: var(--white-20);
+  background: rgba(38, 136, 242, 0.15);
   border-color: var(--primary);
-  box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
 }
 
 input::placeholder {
-  color: var(--white-50);
+  color: var(--white-60);
+  font-weight: 400;
+}
+
+/* LABEL */
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* GLASS MORPHISM */
