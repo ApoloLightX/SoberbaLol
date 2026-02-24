@@ -21,14 +21,14 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, trend, color = 
   return (
     <motion.div
       whileHover={{ scale: 1.02, y: -4 }}
-      className={`glass-panel p-6 border-t-4 ${colorMap[color]} transition-all`}
+      className={`glass-panel p-4 sm:p-6 border-t-4 ${colorMap[color]} transition-all`}
     >
       <div className="flex items-start justify-between mb-4">
-        <div className="p-3 bg-white/5 rounded-lg">{icon}</div>
+        <div className="p-2 sm:p-3 bg-white/5 rounded-lg">{icon}</div>
         {trend && <span className="text-xs font-bold text-[#00ff88]">↑ {trend}</span>}
       </div>
-      <p className="text-white/60 text-sm font-medium mb-2">{title}</p>
-      <h3 className="text-2xl lg:text-3xl font-display font-bold text-white">{value}</h3>
+      <p className="text-white/60 text-xs sm:text-sm font-medium mb-2">{title}</p>
+      <h3 className="text-xl sm:text-2xl lg:text-3xl font-display font-bold text-white">{value}</h3>
     </motion.div>
   );
 };
@@ -46,15 +46,15 @@ const QuickAction: React.FC<QuickActionProps> = ({ label, sub, icon, onClick }) 
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
-      className="p-4 glass-panel border border-white/10 rounded-lg hover:border-[#00ff88]/50 transition-all text-left group"
+      className="p-3 sm:p-4 glass-panel border border-white/10 rounded-lg hover:border-[#00ff88]/50 transition-all text-left group w-full"
     >
-      <div className="flex items-center gap-3 mb-2">
-        <div className="p-2 bg-[#00ff88]/20 rounded-lg group-hover:bg-[#00ff88]/40 transition-all">
+      <div className="flex items-center gap-3">
+        <div className="p-2 bg-[#00ff88]/20 rounded-lg group-hover:bg-[#00ff88]/40 transition-all flex-shrink-0">
           {icon}
         </div>
-        <div>
-          <p className="font-bold text-sm text-white">{label}</p>
-          <p className="text-xs text-white/40">{sub}</p>
+        <div className="min-w-0">
+          <p className="font-bold text-sm text-white truncate">{label}</p>
+          <p className="text-xs text-white/40 truncate">{sub}</p>
         </div>
       </div>
     </motion.button>
@@ -68,115 +68,114 @@ export default function DashboardV2() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="space-y-8 max-w-7xl mx-auto"
+      className="space-y-6 sm:space-y-8 w-full"
     >
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-4xl lg:text-5xl font-display font-black uppercase tracking-tighter">
-          <span className="gradient-text">
-            BEM-VINDO AO SOBERBA
-          </span>
+        <h1 className="text-2xl sm:text-3xl lg:text-5xl font-display font-black uppercase tracking-tighter">
+          <span className="gradient-text">Bem-vindo</span>
         </h1>
-        <p className="text-white/60 text-lg">Sua vantagem estratégica definitiva no Wild Rift. Patch 7.0c</p>
+        <p className="text-white/60 text-sm sm:text-base lg:text-lg">Sua vantagem estratégica no Wild Rift. Patch 7.0c</p>
       </div>
 
-      {/* Key Stats - 4 Column Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Key Stats - Responsive Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatCard
-          title="Meta Atual"
-          value="Tanks & Scaling"
-          icon={<Crown className="text-[#f0ad4e]" size={24} />}
+          title="Meta"
+          value="Tanks"
+          icon={<Crown className="text-[#f0ad4e]" size={20} />}
           trend="Estável"
           color="gold"
         />
         <StatCard
-          title="Win Rate Sugerido"
+          title="Win Rate"
           value="58.4%"
-          icon={<TrendingUp className="text-[#00ff88]" size={24} />}
+          icon={<TrendingUp className="text-[#00ff88]" size={20} />}
           trend="+2.1%"
           color="green"
         />
         <StatCard
-          title="Patch Ativo"
+          title="Patch"
           value="7.0c"
-          icon={<Zap className="text-[#2688f2]" size={24} />}
+          icon={<Zap className="text-[#2688f2]" size={20} />}
           color="blue"
         />
         <StatCard
-          title="Itens Atualizados"
+          title="Itens"
           value="30+"
-          icon={<Shield className="text-[#ff6b6b]" size={24} />}
+          icon={<Shield className="text-[#ff6b6b]" size={20} />}
           trend="Novo"
           color="red"
         />
       </div>
 
       {/* Quick Actions */}
-      <div className="glass-panel p-8 border border-white/10 rounded-xl backdrop-blur-md">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 bg-[#00ff88]/20 rounded-lg">
-            <Flame className="text-[#00ff88]" size={24} />
+      <div className="glass-panel p-4 sm:p-6 lg:p-8 border border-white/10 rounded-xl backdrop-blur-md">
+        <div className="flex items-center gap-3 mb-4 sm:mb-6">
+          <div className="p-2 sm:p-3 bg-[#00ff88]/20 rounded-lg flex-shrink-0">
+            <Flame className="text-[#00ff88]" size={20} />
           </div>
           <div>
-            <h2 className="text-2xl font-display font-bold">Acesso Rápido</h2>
-            <p className="text-white/40 text-sm">Ferramentas essenciais para sua próxima partida</p>
+            <h2 className="text-lg sm:text-2xl font-display font-bold">Acesso Rápido</h2>
+            <p className="text-white/40 text-xs sm:text-sm">Ferramentas essenciais</p>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <QuickAction
-            icon={<Brain size={20} />}
+            icon={<Brain size={18} />}
             label="Coach IA"
-            sub="Análise personalizada"
-            onClick={() => {}}
+            sub="Análise"
+            onClick={() => window.dispatchEvent(new CustomEvent('navigate', { detail: 'coach' }))}
           />
           <QuickAction
-            icon={<Swords size={20} />}
-            label="Matchups"
-            sub="Contra seu oponente"
-            onClick={() => {}}
+            icon={<Swords size={18} />}
+            label="Draft"
+            sub="Simulador"
+            onClick={() => window.dispatchEvent(new CustomEvent('navigate', { detail: 'draft' }))}
           />
           <QuickAction
-            icon={<Target size={20} />}
-            label="Builds Adaptativas"
-            sub="Otimizar seu dano"
-            onClick={() => {}}
+            icon={<Target size={18} />}
+            label="Builds"
+            sub="Adaptativas"
+            onClick={() => window.dispatchEvent(new CustomEvent('navigate', { detail: 'adaptive' }))}
           />
           <QuickAction
-            icon={<Info size={20} />}
-            label="Roadmap Meta"
-            sub="Tendências do patch"
-            onClick={() => {}}
+            icon={<Info size={18} />}
+            label="Meta"
+            label="Roadmap"
+            sub="Tendências"
+            onClick={() => window.dispatchEvent(new CustomEvent('navigate', { detail: 'overview' }))}
           />
         </div>
       </div>
 
-      {/* Featured Section - 2 Column */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Featured Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Patch Notes */}
         <motion.div
           whileHover={{ y: -4 }}
-          className="glass-panel p-8 border border-white/10 rounded-xl backdrop-blur-md"
+          className="glass-panel p-4 sm:p-6 lg:p-8 border border-white/10 rounded-xl backdrop-blur-md"
         >
-          <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-            <Zap className="text-[#00ff88]" size={20} />
-            Patch 7.0c Highlights
+          <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-4 flex items-center gap-2">
+            <Zap className="text-[#00ff88]" size={18} />
+            Patch 7.0c
           </h3>
-          <ul className="space-y-3 text-sm text-white/70">
-            <li className="flex items-start gap-3">
-              <span className="text-[#00ff88] font-bold mt-1">•</span>
-              <span>30+ novos itens exclusivos do Wild Rift adicionados</span>
+          <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-white/70">
+            <li className="flex items-start gap-2">
+              <span className="text-[#00ff88] font-bold mt-0.5 flex-shrink-0">•</span>
+              <span>30+ itens exclusivos adicionados</span>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="text-[#00ff88] font-bold mt-1">•</span>
-              <span>Motor de I.A. migrado para Llama 3.3 70B (Groq)</span>
+            <li className="flex items-start gap-2">
+              <span className="text-[#00ff88] font-bold mt-0.5 flex-shrink-0">•</span>
+              <span>Motor Llama 3.3 70B ativo</span>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="text-[#00ff88] font-bold mt-1">•</span>
-              <span>Interface redesenhada para melhor performance</span>
+            <li className="flex items-start gap-2">
+              <span className="text-[#00ff88] font-bold mt-0.5 flex-shrink-0">•</span>
+              <span>Interface otimizada</span>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="text-[#00ff88] font-bold mt-1">•</span>
-              <span>Análises mais precisas e rápidas</span>
+            <li className="flex items-start gap-2">
+              <span className="text-[#00ff88] font-bold mt-0.5 flex-shrink-0">•</span>
+              <span>Análises precisas</span>
             </li>
           </ul>
         </motion.div>
@@ -184,27 +183,27 @@ export default function DashboardV2() {
         {/* AI Status */}
         <motion.div
           whileHover={{ y: -4 }}
-          className="glass-panel p-8 border border-[#00ff88]/30 rounded-xl backdrop-blur-md bg-gradient-to-br from-[#00ff88]/5 to-transparent"
+          className="glass-panel p-4 sm:p-6 lg:p-8 border border-[#00ff88]/30 rounded-xl backdrop-blur-md bg-gradient-to-br from-[#00ff88]/5 to-transparent"
         >
-          <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-            <Brain className="text-[#00ff88]" size={20} />
-            Motor SOBERBA AI
+          <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-4 flex items-center gap-2">
+            <Brain className="text-[#00ff88]" size={18} />
+            Motor IA
           </h3>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm">
             <div className="flex items-center justify-between">
               <span className="text-white/60">Status</span>
-              <span className="px-3 py-1 bg-[#00ff88]/20 text-[#00ff88] rounded-full text-xs font-bold">✓ Online</span>
+              <span className="px-2 sm:px-3 py-1 bg-[#00ff88]/20 text-[#00ff88] rounded-full text-[10px] sm:text-xs font-bold">Online</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-white/60">Modelo</span>
-              <span className="text-white font-mono text-sm">Llama 3.3 70B</span>
+              <span className="text-white font-mono text-[10px] sm:text-xs">Llama 3.3</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-white/60">Latência</span>
-              <span className="text-[#00ff88] font-bold">~500ms</span>
+              <span className="text-[#00ff88] font-bold">500ms</span>
             </div>
-            <button className="w-full mt-4 py-2 bg-[#00ff88] text-[#0a0e27] font-bold rounded-lg hover:bg-[#00ff88]/90 transition-all">
-              Testar Análise
+            <button className="w-full mt-4 py-2 bg-[#00ff88] text-[#0a0e27] font-bold rounded-lg hover:bg-[#00ff88]/90 transition-all text-xs sm:text-sm">
+              Testar
             </button>
           </div>
         </motion.div>
