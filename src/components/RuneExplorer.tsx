@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Zap, Search, Info, Brain, Target, Shield, Swords } from 'lucide-react';
 import { RUNES, CHAMPIONS, Champion } from '../data/wildrift';
-import { getAdaptiveAdvice } from '../services/geminiService';
+import { getAdaptiveAdvice } from '../services/aiService';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function RuneExplorer() {

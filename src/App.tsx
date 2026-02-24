@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CHAMPIONS, Champion, ITEMS, RUNES } from './data/wildrift';
-import { getAdaptiveAdvice } from './services/geminiService';
+import { getAdaptiveAdvice } from './services/aiService';
 
 import DraftSimulator from './components/DraftSimulator';
 import BuildCalculator from './components/BuildCalculator';

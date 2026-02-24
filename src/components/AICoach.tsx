@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Brain, TrendingUp, AlertTriangle, Zap, Target, History, Swords, Shield } from 'lucide-react';
-import { getAdaptiveAdvice } from '../services/geminiService';
+import { getAdaptiveAdvice } from '../services/aiService';
 import { CHAMPIONS, Champion } from '../data/wildrift';
 import { motion } from 'motion/react';
 

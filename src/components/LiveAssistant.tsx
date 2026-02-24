@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Timer, RotateCcw, Play, SquareSquare, MessageSquare, Zap, Shield, Swords, Target, Brain, X } from 'lucide-react';
-import { getAdaptiveAdvice } from '../services/geminiService';
+import { getAdaptiveAdvice } from '../services/aiService';
 import { CHAMPIONS, Champion } from '../data/wildrift';
 import { motion, AnimatePresence } from 'motion/react';
 
