@@ -33,8 +33,28 @@ body {
   color: var(--light);
   font-family: 'Inter', sans-serif;
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow: hidden;
   font-size: 16px;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* TYPOGRAPHY */
@@ -213,17 +233,20 @@ label {
 }
 
 .glass-panel {
-  background: rgba(26, 31, 58, 0.4);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--white-10);
+  background: rgba(26, 31, 58, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 255, 136, 0.15);
   border-radius: 12px;
   padding: 1.5rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  will-change: transform;
 }
 
 .glass-panel:hover {
-  background: rgba(26, 31, 58, 0.6);
-  border-color: var(--white-20);
+  background: rgba(26, 31, 58, 0.8);
+  border-color: var(--primary);
+  transform: translateY(-2px);
 }
 
 /* CARDS */
