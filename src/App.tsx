@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, 
   Swords, 
@@ -20,7 +20,9 @@ import {
   Brain,
   Calculator,
   MessageSquare,
-  History
+  History,
+  Menu,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CHAMPIONS, Champion, ITEMS, RUNES } from './data/wildrift';
@@ -30,13 +32,18 @@ import DraftSimulator from './components/DraftSimulator';
 import BuildCalculator from './components/BuildCalculator';
 import LiveAssistant from './components/LiveAssistant';
 import AICoach from './components/AICoach';
+import RuneExplorer from './components/RuneExplorer';
+import TeamCompAnalyzer from './components/TeamCompAnalyzer';
+import AdaptiveBuilds from './components/AdaptiveBuilds';
+import MetaRoadmap from './components/MetaRoadmap';
 
-type View = 'dashboard' | 'matchup' | 'gold' | 'teamcomp' | 'builds' | 'runes' | 'overview' | 'draft' | 'builder' | 'live' | 'coach';
+type View = 'dashboard' | 'matchup' | 'gold' | 'teamcomp' | 'builds' | 'runes' | 'overview' | 'draft' | 'builder' | 'live' | 'coach' | 'adaptive';
 
 export default function App() {
   const [activeView, setActiveView] = useState<View>('dashboard');
   const [loading, setLoading] = useState(false);
   const [advice, setAdvice] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Filters
   const [champFilter, setChampFilter] = useState<string>('All');
@@ -75,35 +82,58 @@ export default function App() {
     }
 
     const result = await getAdaptiveAdvice(prompt);
-    setAdvice(result || "Erro ao obter conselhos.");
+    setAdvice(result);
     setLoading(false);
   };
 
+  const navigateTo = (view: View) => {
+    setActiveView(view);
+    setIsMobileMenuOpen(false);
+    setAdvice(null);
+  };
+
   return (
-    <div className="flex h-screen bg-rift-dark overflow-hidden">
+    <div className="flex h-screen bg-rift-dark overflow-hidden text-white font-sans">
       
+      {/* --- MOBILE HEADER --- */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-rift-gray border-b border-white/5 flex items-center justify-between px-6 z-50">
+        <div className="flex items-center gap-2">
+          <Zap className="text-rift-accent" size={20} />
+          <span className="font-display font-bold tracking-tight">SOBERBA RIFT</span>
+        </div>
+        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-white/60">
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
       {/* --- SIDEBAR --- */}
-      <nav className="w-64 bg-rift-gray border-r border-white/5 flex flex-col p-4 gap-1 overflow-y-auto">
-        <div className="flex items-center gap-3 px-4 py-6 mb-4">
+      <nav className={`
+        fixed inset-0 lg:relative lg:inset-auto z-40 w-full lg:w-64 bg-rift-gray border-r border-white/5 flex flex-col p-4 gap-1 overflow-y-auto transition-transform duration-300
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
+        <div className="hidden lg:flex items-center gap-3 px-4 py-6 mb-4">
           <div className="w-10 h-10 bg-rift-accent rounded-lg flex items-center justify-center">
             <Zap className="text-rift-dark fill-rift-dark" size={24} />
           </div>
           <h1 className="font-display font-bold text-xl tracking-tight">SOBERBA RIFT</h1>
         </div>
 
-        <NavItem active={activeView === 'dashboard'} onClick={() => setActiveView('dashboard')} icon={<LayoutDashboard size={18} />} label="Dashboard" />
-        <NavItem active={activeView === 'matchup'} onClick={() => setActiveView('matchup')} icon={<Swords size={18} />} label="Matchups" />
-        <NavItem active={activeView === 'gold'} onClick={() => setActiveView('gold')} icon={<Coins size={18} />} label="Motor de Ouro" />
-        <NavItem active={activeView === 'draft'} onClick={() => setActiveView('draft')} icon={<Users size={18} />} label="Simulador de Draft" />
-        <NavItem active={activeView === 'builder'} onClick={() => setActiveView('builder')} icon={<Calculator size={18} />} label="Construtor de Builds" />
-        <NavItem active={activeView === 'live'} onClick={() => setActiveView('live')} icon={<Timer size={18} />} label="Assistente Live" />
-        <NavItem active={activeView === 'coach'} onClick={() => setActiveView('coach')} icon={<Brain size={18} />} label="Coach Pessoal IA" />
+        <div className="lg:hidden h-16"></div> {/* Spacer for mobile header */}
+
+        <NavItem active={activeView === 'dashboard'} onClick={() => navigateTo('dashboard')} icon={<LayoutDashboard size={18} />} label="Dashboard" />
+        <NavItem active={activeView === 'matchup'} onClick={() => navigateTo('matchup')} icon={<Swords size={18} />} label="Matchups" />
+        <NavItem active={activeView === 'gold'} onClick={() => navigateTo('gold')} icon={<Coins size={18} />} label="Motor de Ouro" />
+        <NavItem active={activeView === 'draft'} onClick={() => navigateTo('draft')} icon={<Users size={18} />} label="Simulador de Draft" />
+        <NavItem active={activeView === 'builder'} onClick={() => navigateTo('builder')} icon={<Calculator size={18} />} label="Construtor de Builds" />
+        <NavItem active={activeView === 'live'} onClick={() => navigateTo('live')} icon={<Timer size={18} />} label="Assistente Live" />
+        <NavItem active={activeView === 'coach'} onClick={() => navigateTo('coach')} icon={<Brain size={18} />} label="Coach Pessoal IA" />
         
         <div className="my-4 border-t border-white/5"></div>
 
-        <NavItem active={activeView === 'teamcomp'} onClick={() => setActiveView('teamcomp')} icon={<ShieldAlert size={18} />} label="Análise de Comp" />
-        <NavItem active={activeView === 'runes'} onClick={() => setActiveView('runes')} icon={<Zap size={18} />} label="Explorador de Runas" />
-        <NavItem active={activeView === 'overview'} onClick={() => setActiveView('overview')} icon={<Target size={18} />} label="Roadmap / Meta" />
+        <NavItem active={activeView === 'teamcomp'} onClick={() => navigateTo('teamcomp')} icon={<Users size={18} />} label="Análise de Comp" />
+        <NavItem active={activeView === 'adaptive'} onClick={() => navigateTo('adaptive')} icon={<ShieldAlert size={18} />} label="Builds Adaptativas" />
+        <NavItem active={activeView === 'runes'} onClick={() => navigateTo('runes')} icon={<Zap size={18} />} label="Explorador de Runas" />
+        <NavItem active={activeView === 'overview'} onClick={() => navigateTo('overview')} icon={<Target size={18} />} label="Roadmap / Meta" />
 
         <div className="mt-auto p-4 glass-panel text-[10px] text-white/40">
           <p className="font-bold text-rift-accent">Soberba Rift v7.0.0-C</p>
@@ -112,32 +142,32 @@ export default function App() {
       </nav>
 
       {/* --- MAIN CONTENT --- */}
-      <main className="flex-1 overflow-y-auto p-8 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-rift-blue/5 via-transparent to-transparent">
+      <main className="flex-1 overflow-y-auto p-4 lg:p-8 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-rift-blue/5 via-transparent to-transparent pt-20 lg:pt-8">
         <AnimatePresence mode="wait">
           
           {/* DASHBOARD */}
           {activeView === 'dashboard' && (
             <motion.div key="dashboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-8">
               <header>
-                <h2 className="text-4xl font-display font-extrabold mb-2 uppercase tracking-tighter gradient-text">BEM-VINDO AO SOBERBA</h2>
+                <h2 className="text-3xl lg:text-4xl font-display font-extrabold mb-2 uppercase tracking-tighter gradient-text">BEM-VINDO AO SOBERBA</h2>
                 <p className="text-white/60">Sua vantagem estratégica definitiva no Wild Rift.</p>
               </header>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
                 <StatCard title="Meta Atual" value="Tanks & Escalonamento" icon={<TrendingUp className="text-rift-accent" />} />
                 <StatCard title="Win Rate Sugerido" value="58.4%" icon={<Target className="text-rift-blue" />} />
                 <StatCard title="Patch Ativo" value="7.0c" icon={<Info className="text-rift-gold" />} />
               </div>
               
-              <div className="glass-panel p-8 space-y-4">
+              <div className="glass-panel p-6 lg:p-8 space-y-4">
                 <h3 className="text-xl font-bold flex items-center gap-2">
                   <Zap className="text-rift-accent" size={20} />
                   Acesso Rápido
                 </h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <QuickAction onClick={() => setActiveView('live')} label="Iniciar Assistente" sub="Para sua match agora" />
-                  <QuickAction onClick={() => setActiveView('matchup')} label="Ver Counter" sub="Contra seu oponente" />
-                  <QuickAction onClick={() => setActiveView('builder')} label="Nova Build" sub="Otimizar seu dano" />
-                  <QuickAction onClick={() => setActiveView('coach')} label="Análise de Perfil" sub="Melhorar seu macro" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                  <QuickAction onClick={() => navigateTo('live')} label="Iniciar Assistente" sub="Para sua match agora" />
+                  <QuickAction onClick={() => navigateTo('matchup')} label="Ver Counter" sub="Contra seu oponente" />
+                  <QuickAction onClick={() => navigateTo('builder')} label="Nova Build" sub="Otimizar seu dano" />
+                  <QuickAction onClick={() => navigateTo('coach')} label="Análise de Perfil" sub="Melhorar seu macro" />
                 </div>
               </div>
             </motion.div>
@@ -157,7 +187,7 @@ export default function App() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" size={14} />
                     <input type="text" placeholder="Buscar..." onChange={(e) => setSearchTerm(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-sm outline-none focus:border-rift-blue mb-2" />
                   </div>
-                  <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-48 overflow-y-auto p-1">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2 max-h-48 overflow-y-auto p-1 custom-scrollbar">
                     {filteredChampions.map(c => (
                       <button key={c.id} onClick={() => setMyChamp(c)} className={`p-2 rounded text-[10px] font-bold border transition-all ${myChamp?.id === c.id ? 'border-rift-blue bg-rift-blue/20 text-white' : 'border-white/5 bg-white/5 text-white/40 hover:bg-white/10'}`}>{c.name}</button>
                     ))}
@@ -165,8 +195,8 @@ export default function App() {
                 </div>
                 <div className="space-y-4">
                   <h4 className="text-sm font-bold text-rift-red uppercase">Campeão Inimigo</h4>
-                  <div className="h-[38px] mb-2"></div> {/* Spacer to align with search */}
-                  <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-48 overflow-y-auto p-1">
+                  <div className="h-[38px] mb-2 hidden md:block"></div>
+                  <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2 max-h-48 overflow-y-auto p-1 custom-scrollbar">
                     {filteredChampions.map(c => (
                       <button key={c.id} onClick={() => setEnemyChamp(c)} className={`p-2 rounded text-[10px] font-bold border transition-all ${enemyChamp?.id === c.id ? 'border-rift-red bg-rift-red/20 text-white' : 'border-white/5 bg-white/5 text-white/40 hover:bg-white/10'}`}>{c.name}</button>
                     ))}
@@ -176,13 +206,14 @@ export default function App() {
               
               <div className="flex justify-center pt-4">
                 <button disabled={!myChamp || !enemyChamp || loading} onClick={() => handleGetAdvice('matchup', { myChamp, enemyChamp })} className="btn-primary w-full md:w-64 flex items-center justify-center gap-2">
-                  {loading ? 'Processando...' : <><Swords size={18} /> Gerar Estratégia</>}
+                  {loading ? <Zap className="animate-spin" size={18} /> : <Swords size={18} />}
+                  {loading ? 'Analisando...' : 'Gerar Estratégia de Duelo'}
                 </button>
               </div>
 
               {advice && (
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="glass-panel p-8 prose prose-invert max-w-none">
-                  <div className="whitespace-pre-wrap leading-relaxed">{advice}</div>
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="glass-panel p-6 lg:p-8 prose prose-invert max-w-none border-l-4 border-l-rift-accent">
+                  <div className="whitespace-pre-wrap leading-relaxed text-sm lg:text-base">{advice}</div>
                 </motion.div>
               )}
             </motion.div>
@@ -195,7 +226,7 @@ export default function App() {
                 <h2 className="text-3xl font-display font-bold text-rift-gold">Motor de Ouro</h2>
                 <p className="text-white/60">Otimize suas compras com base no tempo de jogo e economia.</p>
               </header>
-              <div className="glass-panel p-8 space-y-8">
+              <div className="glass-panel p-6 lg:p-8 space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-4">
                     <label className="block text-sm font-bold text-white/60">Seu Campeão</label>
@@ -217,12 +248,12 @@ export default function App() {
                   <input type="range" min="0" max="20000" step="100" value={currentGold} onChange={(e) => setCurrentGold(parseInt(e.target.value))} className="w-full accent-rift-gold" />
                 </div>
                 <button disabled={!selectedChampGold || loading} onClick={() => handleGetAdvice('gold', { myChamp: selectedChampGold, gold: currentGold, time: gameTime })} className="w-full py-4 bg-rift-gold text-rift-dark font-bold rounded-xl hover:scale-[1.02] transition-transform disabled:opacity-50">
-                  {loading ? 'Calculando Melhor Build...' : 'O que devo comprar agora?'}
+                  {loading ? <Zap className="animate-spin mx-auto" size={20} /> : 'O que devo comprar agora?'}
                 </button>
               </div>
               {advice && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-panel p-8 prose prose-invert max-w-none border-l-4 border-l-rift-gold">
-                  <div className="whitespace-pre-wrap">{advice}</div>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-panel p-6 lg:p-8 prose prose-invert max-w-none border-l-4 border-l-rift-gold">
+                  <div className="whitespace-pre-wrap text-sm lg:text-base">{advice}</div>
                 </motion.div>
               )}
             </motion.div>
@@ -230,86 +261,15 @@ export default function App() {
 
           {/* RUNAS */}
           {activeView === 'runes' && (
-            <motion.div key="runes" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-              <header>
-                <h2 className="text-3xl font-display font-bold text-rift-accent">Explorador de Runas</h2>
-                <p className="text-white/60">Descubra a melhor configuração de runas para cada situação.</p>
-              </header>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="glass-panel p-6 space-y-4">
-                  <h4 className="font-bold text-rift-accent">Selecione o Campeão</h4>
-                  <div className="grid grid-cols-3 gap-2 max-h-96 overflow-y-auto p-1">
-                    {CHAMPIONS.map(c => (
-                      <button key={c.id} onClick={() => handleGetAdvice('runes', { champ: c })} className="p-2 bg-white/5 border border-white/10 rounded text-[10px] hover:border-rift-accent transition-colors">{c.name}</button>
-                    ))}
-                  </div>
-                </div>
-                <div className="md:col-span-2">
-                  {loading ? (
-                    <div className="glass-panel p-12 flex flex-col items-center justify-center text-white/20">
-                      <Zap className="animate-pulse mb-4" size={48} />
-                      <p>Consultando o Oráculo das Runas...</p>
-                    </div>
-                  ) : advice ? (
-                    <div className="glass-panel p-8 prose prose-invert max-w-none border-t-4 border-t-rift-accent">
-                      <div className="whitespace-pre-wrap">{advice}</div>
-                    </div>
-                  ) : (
-                    <div className="glass-panel p-12 flex flex-col items-center justify-center text-white/20 text-center">
-                      <Zap className="mb-4" size={48} />
-                      <p>Selecione um campeão para ver as runas recomendadas para o Patch 7.0c.</p>
-                    </div>
-                  )}
-                </div>
-              </div>
+            <motion.div key="runes" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <RuneExplorer />
             </motion.div>
           )}
 
           {/* ROADMAP / OVERVIEW */}
           {activeView === 'overview' && (
-            <motion.div key="overview" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
-              <header>
-                <h2 className="text-3xl font-display font-bold">Roadmap & Meta Report</h2>
-                <p className="text-white/60">O que está por vir e o que domina o Rift hoje.</p>
-              </header>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="glass-panel p-8 space-y-6">
-                  <h3 className="text-xl font-bold text-rift-accent flex items-center gap-2">
-                    <History size={20} />
-                    Status do Projeto
-                  </h3>
-                  <div className="space-y-4">
-                    <RoadmapItem status="complete" label="Banco de Dados Wild Rift 7.0c" date="Fev 2026" />
-                    <RoadmapItem status="complete" label="Motor de IA Gemini Integrado" date="Fev 2026" />
-                    <RoadmapItem status="current" label="Assistente de Partida em Tempo Real" date="Em progresso" />
-                    <RoadmapItem status="upcoming" label="Integração com API de Perfil (Beta)" date="Mar 2026" />
-                  </div>
-                </div>
-                <div className="glass-panel p-8 space-y-6">
-                  <h3 className="text-xl font-bold text-rift-blue flex items-center gap-2">
-                    <TrendingUp size={20} />
-                    Tier List Resumida (S+)
-                  </h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between p-3 bg-white/5 rounded-lg border-l-4 border-l-rift-accent">
-                      <span className="font-bold">Baron Lane</span>
-                      <span className="text-white/60">Aatrox, Sett, Volibear</span>
-                    </div>
-                    <div className="flex justify-between p-3 bg-white/5 rounded-lg border-l-4 border-l-rift-blue">
-                      <span className="font-bold">Jungle</span>
-                      <span className="text-white/60">Viego, Lee Sin, Hecarim</span>
-                    </div>
-                    <div className="flex justify-between p-3 bg-white/5 rounded-lg border-l-4 border-l-rift-gold">
-                      <span className="font-bold">Mid Lane</span>
-                      <span className="text-white/60">Syndra, Yone, Akali</span>
-                    </div>
-                    <div className="flex justify-between p-3 bg-white/5 rounded-lg border-l-4 border-l-rift-red">
-                      <span className="font-bold">Dragon Lane</span>
-                      <span className="text-white/60">Kalista, Zeri, Lucian</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <motion.div key="overview" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <MetaRoadmap />
             </motion.div>
           )}
 
@@ -343,16 +303,15 @@ export default function App() {
 
           {/* ANÁLISE DE COMP */}
           {activeView === 'teamcomp' && (
-            <motion.div key="teamcomp" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-               <header>
-                <h2 className="text-3xl font-display font-bold text-rift-red">Análise de Composição</h2>
-                <p className="text-white/60">Entenda os pontos fortes e fracos da sua equipe vs inimigos.</p>
-              </header>
-              <div className="glass-panel p-12 flex flex-col items-center justify-center text-white/20 text-center">
-                <Users className="mb-4" size={48} />
-                <p>Esta funcionalidade está sendo integrada ao Simulador de Draft para uma experiência mais fluida.</p>
-                <button onClick={() => setActiveView('draft')} className="mt-4 text-rift-accent hover:underline">Ir para Simulador de Draft</button>
-              </div>
+            <motion.div key="teamcomp" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <TeamCompAnalyzer />
+            </motion.div>
+          )}
+
+          {/* BUILDS ADAPTATIVAS */}
+          {activeView === 'adaptive' && (
+            <motion.div key="adaptive" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <AdaptiveBuilds />
             </motion.div>
           )}
 
@@ -376,7 +335,7 @@ function StatCard({ title, value, icon }: { title: string, value: string, icon: 
       <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center">{icon}</div>
       <div>
         <p className="text-[10px] text-white/40 uppercase font-extrabold tracking-widest">{title}</p>
-        <p className="text-xl font-display font-bold">{value}</p>
+        <p className="text-lg lg:text-xl font-display font-bold">{value}</p>
       </div>
     </div>
   );
@@ -399,6 +358,15 @@ function RoadmapItem({ status, label, date }: { status: 'complete' | 'current' |
         <p className={`text-sm ${status === 'upcoming' ? 'text-white/40' : 'text-white'}`}>{label}</p>
         <p className="text-[10px] text-white/20">{date}</p>
       </div>
+    </div>
+  );
+}
+
+function TierItem({ role, champs, color }: { role: string, champs: string, color: string }) {
+  return (
+    <div className={`flex justify-between p-3 bg-white/5 rounded-lg border-l-4 border-l-${color}`}>
+      <span className="font-bold text-xs lg:text-sm">{role}</span>
+      <span className="text-white/60 text-[10px] lg:text-xs">{champs}</span>
     </div>
   );
 }
