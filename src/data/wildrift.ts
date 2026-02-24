@@ -181,28 +181,686 @@ export const CHAMPIONS: Champion[] = [
 ];
 
 export const ITEMS: Item[] = [
-  { id: 'infinity_edge', name: 'Infinity Edge', price: 3400, category: 'Physical', stats: { ad: 55, crit: 25 }, tags: ['Burst', 'Crit'], description: 'Critical Strike damage increased to 230%.' },
-  { id: 'black_cleaver', name: 'Black Cleaver', price: 3000, category: 'Physical', stats: { ad: 40, hp: 350, ah: 20 }, tags: ['Anti-Armor', 'Sustained'], description: 'Reduces enemy armor by up to 24%.' },
-  { id: 'rabadons_deathcap', name: 'Rabadon\'s Deathcap', price: 3400, category: 'Magical', stats: { ap: 100 }, tags: ['Burst', 'Scaling'], description: 'Increases Ability Power by 40%.' },
-  { id: 'thornmail', name: 'Thornmail', price: 2700, category: 'Defense', stats: { armor: 75, hp: 200 }, tags: ['Anti-Heal', 'Anti-AD'], description: 'Reflects damage and applies Grievous Wounds.' },
-  { id: 'force_of_nature', name: 'Force of Nature', price: 2850, category: 'Defense', stats: { mr: 50, hp: 350 }, tags: ['Anti-AP', 'Mobility'], description: 'Increases MR and MS when taking magic damage.' },
-  { id: 'divine_sunderer', name: 'Divine Sunderer', price: 3300, category: 'Physical', stats: { ad: 25, hp: 400, ah: 20 }, tags: ['Anti-Tank', 'Sustained'], description: 'Spellblade deals max health damage and heals.' },
-  { id: 'blade_of_the_ruined_king', name: 'Blade of the Ruined King', price: 3100, category: 'Physical', stats: { ad: 20, as: 35 }, tags: ['Anti-Tank', 'Sustained'], description: 'Attacks deal 6% current health damage.' },
-  { id: 'terminus', name: 'Terminus', price: 3300, category: 'Physical', stats: { ad: 40, as: 30 }, tags: ['Anti-Tank', 'Hybrid-Pen'], description: 'Alternates between Armor and Magic penetration.' },
-  { id: 'heartsteel', name: 'Heartsteel', price: 3000, category: 'Defense', stats: { hp: 700, ah: 20 }, tags: ['Scaling', 'Anti-Burst'], description: 'Infinite health scaling via basic attacks.' },
-  { id: 'sovereign', name: 'Sovereign', price: 3200, category: 'Magical', stats: { ap: 80, hp: 150, ah: 15 }, tags: ['Scaling', 'Utility'], description: 'Unique scaling based on takedowns.' },
-  { id: 'titanic_hydra', name: 'Titanic Hydra', price: 3000, category: 'Physical', stats: { ad: 30, hp: 550 }, tags: ['Waveclear', 'Scaling'], description: 'Cleave damage based on max health.' },
-  { id: 'shattered_queen', name: 'Crown of the Shattered Queen', price: 3000, category: 'Magical', stats: { ap: 60, hp: 250, ah: 20 }, tags: ['Anti-Burst', 'Defense'], description: 'Shield that reduces incoming damage by 70%.' },
-  { id: 'magnetic_blaster', name: 'Magnetic Blaster', price: 2900, category: 'Physical', stats: { as: 35, crit: 25 }, tags: ['Waveclear', 'Burst'], description: 'Energized attacks deal splash magic damage.' },
-  { id: 'wits_end', name: 'Wit\'s End', price: 2700, category: 'Physical', stats: { as: 45, mr: 50 }, tags: ['Anti-AP', 'Sustained'], description: 'On-hit magic damage and MR.' },
-  { id: 'deaths_dance', name: 'Death\'s Dance', price: 3100, category: 'Physical', stats: { ad: 35, armor: 40, ah: 15 }, tags: ['Anti-Burst', 'Sustained'], description: 'Defers 35% of damage taken into a bleed.' },
-  { id: 'liandrys_torment', name: 'Liandry\'s Torment', price: 3100, category: 'Magical', stats: { ap: 70, hp: 250 }, tags: ['Anti-Tank', 'Sustained'], description: 'Burn damage based on max health.' },
-  { id: 'frozen_heart', name: 'Frozen Heart', price: 2700, category: 'Defense', stats: { armor: 80, ah: 25 }, tags: ['Anti-AS', 'Anti-AD'], description: 'Reduces nearby enemies\' attack speed.' },
-  { id: 'spirit_visage', name: 'Spirit Visage', price: 2900, category: 'Defense', stats: { mr: 50, hp: 350, ah: 20 }, tags: ['Anti-AP', 'Sustained'], description: 'Increases all healing and shielding by 30%.' },
-  { id: 'mortal_reminder', name: 'Mortal Reminder', price: 3000, category: 'Physical', stats: { ad: 45, pen: 30 }, tags: ['Anti-Heal', 'Anti-Armor'], description: 'Applies Grievous Wounds and Armor Pen.' },
-  { id: 'seraphs_embrace', name: 'Seraph\'s Embrace', price: 3000, category: 'Magical', stats: { ap: 60, ah: 25 }, tags: ['Scaling', 'Anti-Burst'], description: 'Grants a shield when falling below 35% HP.' },
-  { id: 'randuins_omen', name: 'Randuin\'s Omen', price: 2800, category: 'Defense', stats: { armor: 60, hp: 400 }, tags: ['Anti-Crit', 'Anti-AD'], description: 'Reduces damage from critical strikes.' },
-  { id: 'serpents_fang', name: 'Serpent\'s Fang', price: 2800, category: 'Physical', stats: { ad: 50, ah: 10 }, tags: ['Anti-Shield', 'Burst'], description: 'Reduces enemy shields by 50%.' },
+  {
+    "id": "infinity_edge",
+    "name": "Infinity Edge",
+    "price": 3400,
+    "category": "Physical",
+    "stats": {
+      "ad": 55,
+      "crit": 25
+    },
+    "tags": [
+      "Burst",
+      "Crit"
+    ],
+    "description": "Critical Strike damage increased to 230%."
+  },
+  {
+    "id": "black_cleaver",
+    "name": "Black Cleaver",
+    "price": 3000,
+    "category": "Physical",
+    "stats": {
+      "ad": 40,
+      "hp": 350,
+      "ah": 20
+    },
+    "tags": [
+      "Anti-Armor",
+      "Sustained"
+    ],
+    "description": "Reduces enemy armor by up to 24%."
+  },
+  {
+    "id": "blade_of_the_ruined_king",
+    "name": "Blade of the Ruined King",
+    "price": 3100,
+    "category": "Physical",
+    "stats": {
+      "ad": 20,
+      "as": 35
+    },
+    "tags": [
+      "Anti-Tank",
+      "Sustained"
+    ],
+    "description": "Attacks deal 6% current health damage."
+  },
+  {
+    "id": "divine_sunderer",
+    "name": "Divine Sunderer",
+    "price": 3300,
+    "category": "Physical",
+    "stats": {
+      "ad": 25,
+      "hp": 400,
+      "ah": 20
+    },
+    "tags": [
+      "Anti-Tank",
+      "Sustained"
+    ],
+    "description": "Spellblade deals max health damage and heals."
+  },
+  {
+    "id": "mortal_reminder",
+    "name": "Mortal Reminder",
+    "price": 3000,
+    "category": "Physical",
+    "stats": {
+      "ad": 45,
+      "pen": 30
+    },
+    "tags": [
+      "Anti-Heal",
+      "Anti-Armor"
+    ],
+    "description": "Applies Grievous Wounds and Armor Pen."
+  },
+  {
+    "id": "serpents_fang",
+    "name": "Serpent's Fang",
+    "price": 2800,
+    "category": "Physical",
+    "stats": {
+      "ad": 50,
+      "ah": 10
+    },
+    "tags": [
+      "Anti-Shield",
+      "Burst"
+    ],
+    "description": "Reduces enemy shields by 50%."
+  },
+  {
+    "id": "the_collector",
+    "name": "The Collector",
+    "price": 2900,
+    "category": "Physical",
+    "stats": {
+      "ad": 40,
+      "crit": 25
+    },
+    "tags": [
+      "Execute",
+      "Burst"
+    ],
+    "description": "Executes enemies below 5% health."
+  },
+  {
+    "id": "guardian_angel",
+    "name": "Guardian Angel",
+    "price": 3400,
+    "category": "Physical",
+    "stats": {
+      "ad": 40,
+      "armor": 40
+    },
+    "tags": [
+      "Revive",
+      "Defense"
+    ],
+    "description": "Resurrects upon taking lethal damage."
+  },
+  {
+    "id": "steraks_gage",
+    "name": "Sterak's Gage",
+    "price": 3000,
+    "category": "Physical",
+    "stats": {
+      "hp": 400
+    },
+    "tags": [
+      "Anti-Burst",
+      "Shield"
+    ],
+    "description": "Grants a shield when taking heavy damage."
+  },
+  {
+    "id": "deaths_dance",
+    "name": "Death's Dance",
+    "price": 3100,
+    "category": "Physical",
+    "stats": {
+      "ad": 35,
+      "armor": 40,
+      "ah": 15
+    },
+    "tags": [
+      "Anti-Burst",
+      "Sustained"
+    ],
+    "description": "Defers 35% of damage taken into a bleed."
+  },
+  {
+    "id": "wits_end",
+    "name": "Wit's End",
+    "price": 2700,
+    "category": "Physical",
+    "stats": {
+      "as": 45,
+      "mr": 50
+    },
+    "tags": [
+      "Anti-AP",
+      "Sustained"
+    ],
+    "description": "On-hit magic damage and MR."
+  },
+  {
+    "id": "magnetic_blaster",
+    "name": "Magnetic Blaster",
+    "price": 2900,
+    "category": "Physical",
+    "stats": {
+      "as": 35,
+      "crit": 25
+    },
+    "tags": [
+      "Waveclear",
+      "Burst"
+    ],
+    "description": "Energized attacks deal splash magic damage."
+  },
+  {
+    "id": "galeforce",
+    "name": "Galeforce",
+    "price": 3100,
+    "category": "Physical",
+    "stats": {
+      "ad": 30,
+      "crit": 25,
+      "as": 15
+    },
+    "tags": [
+      "Mobility",
+      "Execute"
+    ],
+    "description": "Active: Dash and fire missiles at low health enemies."
+  },
+  {
+    "id": "terminus",
+    "name": "Terminus",
+    "price": 3300,
+    "category": "Physical",
+    "stats": {
+      "ad": 40,
+      "as": 30
+    },
+    "tags": [
+      "Anti-Tank",
+      "Hybrid-Pen"
+    ],
+    "description": "Alternates between Armor and Magic penetration."
+  },
+  {
+    "id": "titanic_hydra",
+    "name": "Titanic Hydra",
+    "price": 3000,
+    "category": "Physical",
+    "stats": {
+      "ad": 30,
+      "hp": 550
+    },
+    "tags": [
+      "Waveclear",
+      "Scaling"
+    ],
+    "description": "Cleave damage based on max health."
+  },
+  {
+    "id": "spear_of_shojin",
+    "name": "Spear of Shojin",
+    "price": 3200,
+    "category": "Physical",
+    "stats": {
+      "ad": 50,
+      "hp": 300,
+      "ah": 20
+    },
+    "tags": [
+      "Haste",
+      "Mobility"
+    ],
+    "description": "Basic abilities gain Haste after using Ultimate."
+  },
+  {
+    "id": "sundered_sky",
+    "name": "Sundered Sky",
+    "price": 3000,
+    "category": "Physical",
+    "stats": {
+      "ad": 40,
+      "hp": 300,
+      "ah": 15
+    },
+    "tags": [
+      "Sustained",
+      "Burst"
+    ],
+    "description": "First attack against a champion crits and heals."
+  },
+  {
+    "id": "seryldas_grudge",
+    "name": "Serylda's Grudge",
+    "price": 3000,
+    "category": "Physical",
+    "stats": {
+      "ad": 40,
+      "ah": 15,
+      "pen": 30
+    },
+    "tags": [
+      "Slow",
+      "Anti-Armor"
+    ],
+    "description": "Abilities slow enemies by 30%."
+  },
+  {
+    "id": "rabadons_deathcap",
+    "name": "Rabadon's Deathcap",
+    "price": 3400,
+    "category": "Magical",
+    "stats": {
+      "ap": 100
+    },
+    "tags": [
+      "Burst",
+      "Scaling"
+    ],
+    "description": "Increases Ability Power by 40%."
+  },
+  {
+    "id": "ludens_echo",
+    "name": "Luden's Echo",
+    "price": 3000,
+    "category": "Magical",
+    "stats": {
+      "ap": 85,
+      "ah": 20
+    },
+    "tags": [
+      "Burst",
+      "Waveclear"
+    ],
+    "description": "Echo deals splash damage on ability hit."
+  },
+  {
+    "id": "infinity_orb",
+    "name": "Infinity Orb",
+    "price": 2900,
+    "category": "Magical",
+    "stats": {
+      "ap": 85,
+      "hp": 200
+    },
+    "tags": [
+      "Burst",
+      "Execute"
+    ],
+    "description": "Abilities crit against enemies below 35% health."
+  },
+  {
+    "id": "liandrys_torment",
+    "name": "Liandry's Torment",
+    "price": 3100,
+    "category": "Magical",
+    "stats": {
+      "ap": 70,
+      "hp": 250
+    },
+    "tags": [
+      "Anti-Tank",
+      "Sustained"
+    ],
+    "description": "Burn damage based on max health."
+  },
+  {
+    "id": "shattered_queen",
+    "name": "Crown of the Shattered Queen",
+    "price": 3000,
+    "category": "Magical",
+    "stats": {
+      "ap": 60,
+      "hp": 250,
+      "ah": 20
+    },
+    "tags": [
+      "Anti-Burst",
+      "Defense"
+    ],
+    "description": "Shield that reduces incoming damage by 70%."
+  },
+  {
+    "id": "awakened_soulstealer",
+    "name": "Awakened Soulstealer",
+    "price": 3000,
+    "category": "Magical",
+    "stats": {
+      "ap": 65,
+      "hp": 150,
+      "ah": 20
+    },
+    "tags": [
+      "Ultimate-Haste",
+      "Snowball"
+    ],
+    "description": "Takedowns reduce Ultimate cooldown."
+  },
+  {
+    "id": "crystalline_reflector",
+    "name": "Crystalline Reflector",
+    "price": 2900,
+    "category": "Magical",
+    "stats": {
+      "ap": 60,
+      "armor": 45,
+      "ah": 15
+    },
+    "tags": [
+      "Anti-AD",
+      "Defense"
+    ],
+    "description": "Reflects physical damage and reduces it."
+  },
+  {
+    "id": "riftmaker",
+    "name": "Riftmaker",
+    "price": 3200,
+    "category": "Magical",
+    "stats": {
+      "ap": 80,
+      "hp": 150,
+      "ah": 15,
+      "omnivamp": 12
+    },
+    "tags": [
+      "Sustained",
+      "True-Damage"
+    ],
+    "description": "Bonus damage that converts to true damage."
+  },
+  {
+    "id": "oceanids_trident",
+    "name": "Oceanid's Trident",
+    "price": 2600,
+    "category": "Magical",
+    "stats": {
+      "ap": 80,
+      "ah": 10
+    },
+    "tags": [
+      "Anti-Shield",
+      "Utility"
+    ],
+    "description": "Damaging enemies reduces their shields."
+  },
+  {
+    "id": "psychic_projector",
+    "name": "Psychic Projector",
+    "price": 3000,
+    "category": "Magical",
+    "stats": {
+      "ap": 60,
+      "hp": 300
+    },
+    "tags": [
+      "Defense",
+      "Scaling"
+    ],
+    "description": "Grants AP based on bonus health."
+  },
+  {
+    "id": "malignance",
+    "name": "Malignance",
+    "price": 3000,
+    "category": "Magical",
+    "stats": {
+      "ap": 80,
+      "ah": 20
+    },
+    "tags": [
+      "Ultimate-Haste",
+      "Zone-Control"
+    ],
+    "description": "Ultimate creates a zone that shreds MR."
+  },
+  {
+    "id": "horizon_focus",
+    "name": "Horizon Focus",
+    "price": 2800,
+    "category": "Magical",
+    "stats": {
+      "ap": 80,
+      "ah": 15
+    },
+    "tags": [
+      "Burst",
+      "Vision"
+    ],
+    "description": "Damaging enemies from afar reveals and marks them."
+  },
+  {
+    "id": "thornmail",
+    "name": "Thornmail",
+    "price": 2700,
+    "category": "Defense",
+    "stats": {
+      "armor": 75,
+      "hp": 200
+    },
+    "tags": [
+      "Anti-Heal",
+      "Anti-AD"
+    ],
+    "description": "Reflects damage and applies Grievous Wounds."
+  },
+  {
+    "id": "force_of_nature",
+    "name": "Force of Nature",
+    "price": 2850,
+    "category": "Defense",
+    "stats": {
+      "mr": 50,
+      "hp": 350
+    },
+    "tags": [
+      "Anti-AP",
+      "Mobility"
+    ],
+    "description": "Increases MR and MS when taking magic damage."
+  },
+  {
+    "id": "heartsteel",
+    "name": "Heartsteel",
+    "price": 3000,
+    "category": "Defense",
+    "stats": {
+      "hp": 700,
+      "ah": 20
+    },
+    "tags": [
+      "Scaling",
+      "Anti-Burst"
+    ],
+    "description": "Infinite health scaling via basic attacks."
+  },
+  {
+    "id": "frozen_heart",
+    "name": "Frozen Heart",
+    "price": 2700,
+    "category": "Defense",
+    "stats": {
+      "armor": 80,
+      "ah": 25
+    },
+    "tags": [
+      "Anti-AS",
+      "Anti-AD"
+    ],
+    "description": "Reduces nearby enemies' attack speed."
+  },
+  {
+    "id": "randuins_omen",
+    "name": "Randuin's Omen",
+    "price": 2800,
+    "category": "Defense",
+    "stats": {
+      "armor": 60,
+      "hp": 400
+    },
+    "tags": [
+      "Anti-Crit",
+      "Anti-AD"
+    ],
+    "description": "Reduces damage from critical strikes."
+  },
+  {
+    "id": "amaranths_twinguard",
+    "name": "Amaranth's Twinguard",
+    "price": 3200,
+    "category": "Defense",
+    "stats": {
+      "armor": 55,
+      "mr": 55
+    },
+    "tags": [
+      "Hybrid-Resist",
+      "Tenacity"
+    ],
+    "description": "Increases size and resistances in combat."
+  },
+  {
+    "id": "kaenic_rookern",
+    "name": "Kaenic Rookern",
+    "price": 3000,
+    "category": "Defense",
+    "stats": {
+      "hp": 400,
+      "mr": 80,
+      "ah": 10
+    },
+    "tags": [
+      "Anti-AP",
+      "Shield"
+    ],
+    "description": "Grants a magic shield after not taking damage."
+  },
+  {
+    "id": "mantle_of_twelfth_hour",
+    "name": "Mantle of the Twelfth Hour",
+    "price": 2900,
+    "category": "Defense",
+    "stats": {
+      "armor": 50,
+      "mr": 50,
+      "hp": 200
+    },
+    "tags": [
+      "Anti-Burst",
+      "Heal"
+    ],
+    "description": "Heals and grants speed when low health."
+  },
+  {
+    "id": "radiant_virtue",
+    "name": "Radiant Virtue",
+    "price": 3000,
+    "category": "Defense",
+    "stats": {
+      "hp": 400,
+      "ah": 15,
+      "armor": 40,
+      "mr": 40
+    },
+    "tags": [
+      "Team-Heal",
+      "Utility"
+    ],
+    "description": "Heals nearby allies after using Ultimate."
+  },
+  {
+    "id": "hollow_radiance",
+    "name": "Hollow Radiance",
+    "price": 2900,
+    "category": "Defense",
+    "stats": {
+      "hp": 500,
+      "mr": 40
+    },
+    "tags": [
+      "Waveclear",
+      "Anti-AP"
+    ],
+    "description": "Deals magic damage to nearby enemies."
+  },
+  {
+    "id": "boots_mana",
+    "name": "Boots of Mana",
+    "price": 1400,
+    "category": "Boots",
+    "stats": {
+      "ap": 60,
+      "pen": 8
+    },
+    "tags": [
+      "Magic-Pen",
+      "Mana"
+    ],
+    "description": "Grants AP and Magic Penetration."
+  },
+  {
+    "id": "boots_dynamism",
+    "name": "Boots of Dynamism",
+    "price": 1500,
+    "category": "Boots",
+    "stats": {
+      "ad": 30,
+      "pen": 8
+    },
+    "tags": [
+      "Armor-Pen",
+      "Mobility"
+    ],
+    "description": "Grants AD and Armor Penetration."
+  },
+  {
+    "id": "stasis_enchant",
+    "name": "Stasis Enchant",
+    "price": 800,
+    "category": "Enchantment",
+    "stats": {},
+    "tags": [
+      "Invulnerable",
+      "Active"
+    ],
+    "description": "Active: Become invulnerable for 2.5s."
+  },
+  {
+    "id": "quicksilver_enchant",
+    "name": "Quicksilver Enchant",
+    "price": 800,
+    "category": "Enchantment",
+    "stats": {},
+    "tags": [
+      "Cleanse",
+      "Active"
+    ],
+    "description": "Active: Removes all crowd control."
+  },
+  {
+    "id": "protobelt_enchant",
+    "name": "Protobelt Enchant",
+    "price": 800,
+    "category": "Enchantment",
+    "stats": {},
+    "tags": [
+      "Mobility",
+      "Active"
+    ],
+    "description": "Active: Dash forward and fire missiles."
+  }
 ];
 
 export const RUNES: Rune[] = [
