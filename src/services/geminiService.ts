@@ -25,10 +25,9 @@ export const getAdaptiveAdvice = async (prompt: string) => {
   }
 
   try {
-    // Usando gemini-1.5-flash-latest para respostas rápidas e eficientes
-    // Este é o modelo mais estável e recomendado pela Google
+    // Usando gemini-1.5-flash - Este é o nome de modelo mais comum e suportado
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash-latest",
+      model: "gemini-1.5-flash",
       generationConfig: {
         temperature: 0.7,
         topP: 0.8,
@@ -58,10 +57,15 @@ export const getAdaptiveAdvice = async (prompt: string) => {
     if (errorMessage.includes("quota") || errorMessage.includes("RESOURCE_EXHAUSTED")) {
       return "Limite de requisições atingido. Tente novamente em instantes.";
     }
-    if (errorMessage.includes("404") || errorMessage.includes("not found")) {
-      return "Erro: Modelo de IA não encontrado. Verifique a configuração da API.";
-    }
     
-    return "O Coach está analisando... Tente novamente em alguns segundos.";
+    // Se falhar com 1.5-flash, tenta o gemini-pro como fallback automático
+    try {
+      const fallbackModel = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const result = await fallbackModel.generateContent(prompt);
+      const response = await result.response;
+      return response.text();
+    } catch (fallbackError) {
+      return "O Coach está analisando... Tente novamente em alguns segundos.";
+    }
   }
 };
