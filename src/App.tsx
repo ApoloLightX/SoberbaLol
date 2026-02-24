@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  * 
- * SOBERBA RIFT v3.0 - CORE APPLICATION
+ * SOBERBA RIFT v3.1 - CORE APPLICATION
  */
 
 import React, { useState } from 'react';
@@ -18,7 +18,8 @@ import {
   Calculator,
   Timer,
   Menu,
-  X
+  X,
+  Bug
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import './styles/theme.css';
@@ -32,8 +33,9 @@ import TeamCompAnalyzer from './components/TeamCompAnalyzer';
 import AdaptiveBuilds from './components/AdaptiveBuilds';
 import MetaRoadmap from './components/MetaRoadmap';
 import DashboardV2 from './components/DashboardV2';
+import UIInspector from './components/UIInspector';
 
-type View = 'dashboard' | 'matchup' | 'gold' | 'teamcomp' | 'builds' | 'runes' | 'overview' | 'draft' | 'builder' | 'live' | 'coach' | 'adaptive';
+type View = 'dashboard' | 'matchup' | 'gold' | 'teamcomp' | 'builds' | 'runes' | 'overview' | 'draft' | 'builder' | 'live' | 'coach' | 'adaptive' | 'inspector';
 
 export default function App() {
   const [activeView, setActiveView] = useState<View>('dashboard');
@@ -80,10 +82,15 @@ export default function App() {
         <div className="my-4 border-t border-white/5"></div>
 
         <NavItem active={activeView === 'draft'} onClick={() => navigateTo('draft')} icon={<Users size={18} />} label="Simulador de Draft" />
+        <NavItem active={activeView === 'teamcomp'} onClick={() => navigateTo('teamcomp')} icon={<Target size={18} />} label="Análise de Comp" />
         <NavItem active={activeView === 'builder'} onClick={() => navigateTo('builder')} icon={<Calculator size={18} />} label="Construtor de Builds" />
         <NavItem active={activeView === 'live'} onClick={() => navigateTo('live')} icon={<Timer size={18} />} label="Assistente Live" />
         <NavItem active={activeView === 'runes'} onClick={() => navigateTo('runes')} icon={<Zap size={18} />} label="Explorador de Runas" />
         <NavItem active={activeView === 'overview'} onClick={() => navigateTo('overview')} icon={<Target size={18} />} label="Roadmap / Meta" />
+
+        <div className="mt-8 border-t border-white/5 pt-4">
+           <NavItem active={activeView === 'inspector'} onClick={() => navigateTo('inspector')} icon={<Bug size={18} />} label="UI Inspector" />
+        </div>
 
         <div className="mt-auto p-4 glass-panel text-[10px] text-white/40">
           <p className="font-bold text-rift-accent">Soberba Rift v7.0.0-C</p>
@@ -104,13 +111,20 @@ export default function App() {
           {activeView === 'teamcomp' && <TeamCompAnalyzer />}
           {activeView === 'adaptive' && <AdaptiveBuilds />}
           {activeView === 'overview' && <MetaRoadmap />}
+          {activeView === 'inspector' && <UIInspector />}
           
-          {/* Fallback for matchup since it was partially in App.tsx before */}
+          {/* Enhanced Matchup View with AI Integration */}
           {activeView === 'matchup' && (
-            <div className="flex flex-col items-center justify-center h-full text-center p-20 glass-panel">
+            <div className="flex flex-col items-center justify-center h-full text-center p-20 glass-panel border-t-2 border-t-rift-blue">
               <Swords size={64} className="text-rift-blue mb-4 opacity-20" />
-              <h3 className="text-2xl font-bold">Módulo de Matchups</h3>
-              <p className="text-white/40 max-w-md">O módulo de matchups está sendo otimizado para a nova base de dados de itens. Use o Coach IA para análises de matchup por enquanto.</p>
+              <h3 className="text-2xl font-display font-bold">Módulo de Matchups</h3>
+              <p className="text-white/40 max-w-md mb-8">O módulo de matchups foi unificado com o **Coach IA** para fornecer análises mais profundas e precisas via Llama 3.3.</p>
+              <button 
+                onClick={() => navigateTo('coach')}
+                className="px-8 py-3 bg-rift-blue text-white font-bold rounded-xl hover:bg-blue-600 transition-all shadow-[0_0_20px_rgba(38,136,242,0.3)]"
+              >
+                Ir para o Coach IA
+              </button>
             </div>
           )}
 
