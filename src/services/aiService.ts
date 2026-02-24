@@ -1,8 +1,5 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import Groq from "groq-sdk";
-
 /**
- * SOBERBA RIFT - Serviço de IA Unificado
+ * SOBERBA RIFT - Serviço de IA Unificado (REST API)
  * Suporta Groq (primário) e Gemini (fallback)
  * Ambas as APIs são gratuitas e ultrarrápidas
  */
@@ -10,33 +7,29 @@ import Groq from "groq-sdk";
 const groqApiKey = import.meta.env.VITE_GROQ_API_KEY || "";
 const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
 
-let groqClient: Groq | null = null;
-let geminiClient: GoogleGenerativeAI | null = null;
-
-if (groqApiKey && groqApiKey !== "") {
-  groqClient = new Groq({ apiKey: groqApiKey });
-  console.log("[AI Service] ✅ Groq Client inicializado");
-}
-
-if (geminiApiKey && geminiApiKey !== "") {
-  geminiClient = new GoogleGenerativeAI(geminiApiKey);
-  console.log("[AI Service] ✅ Gemini Client inicializado");
-}
+console.log("[AI Service] Inicializando com chaves:");
+console.log("[AI Service] VITE_GROQ_API_KEY:", groqApiKey ? "✅ Configurada" : "❌ Não configurada");
+console.log("[AI Service] VITE_GEMINI_API_KEY:", geminiApiKey ? "✅ Configurada" : "❌ Não configurada");
 
 /**
- * Obtém análise estratégica da IA
- * Tenta Groq primeiro, depois Gemini como fallback
+ * Chama a API do Groq via REST
  */
-export const getAdaptiveAdvice = async (prompt: string): Promise<string> => {
-  console.log("[AI Service] Iniciando requisição de IA...");
-  console.log("[AI Service] Groq disponível:", !!groqClient);
-  console.log("[AI Service] Gemini disponível:", !!geminiClient);
+async function callGroqAPI(prompt: string): Promise<string | null> {
+  if (!groqApiKey) {
+    console.log("[AI Service] ⚠️ Groq: Chave não configurada");
+    return null;
+  }
 
-  // Tenta Groq primeiro (mais rápido e gratuito)
-  if (groqClient) {
-    try {
-      console.log("[AI Service] 🔄 Tentando Groq com modelo mixtral-8x7b-32768...");
-      const response = await groqClient.chat.completions.create({
+  try {
+    console.log("[AI Service] 🔄 Chamando Groq (mixtral-8x7b-32768)...");
+    
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${groqApiKey}`,
+      },
+      body: JSON.stringify({
         model: "mixtral-8x7b-32768",
         messages: [
           {
@@ -46,103 +39,190 @@ export const getAdaptiveAdvice = async (prompt: string): Promise<string> => {
         ],
         temperature: 0.7,
         max_tokens: 1024,
-      });
+      }),
+    });
 
-      const content = response.choices[0]?.message?.content;
-      if (content) {
-        console.log("[AI Service] ✅ Groq respondeu com sucesso!");
-        return content;
-      } else {
-        console.warn("[AI Service] ⚠️ Groq retornou resposta vazia");
-      }
-    } catch (groqError: any) {
-      console.error("[AI Service] ❌ Erro no Groq:", groqError.message || groqError);
-      console.error("[AI Service] Stack:", groqError.stack);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("[AI Service] ❌ Groq Error:", response.status, errorData);
+      return null;
     }
-  } else {
-    console.warn("[AI Service] ⚠️ Groq Client não inicializado (chave ausente)");
+
+    const data = await response.json();
+    const content = data.choices?.[0]?.message?.content;
+
+    if (content) {
+      console.log("[AI Service] ✅ Groq respondeu com sucesso!");
+      return content;
+    } else {
+      console.warn("[AI Service] ⚠️ Groq retornou resposta vazia");
+      return null;
+    }
+  } catch (error: any) {
+    console.error("[AI Service] ❌ Erro ao chamar Groq:", error.message);
+    return null;
+  }
+}
+
+/**
+ * Chama a API do Gemini via REST
+ */
+async function callGeminiAPI(prompt: string): Promise<string | null> {
+  if (!geminiApiKey) {
+    console.log("[AI Service] ⚠️ Gemini: Chave não configurada");
+    return null;
+  }
+
+  try {
+    console.log("[AI Service] 🔄 Chamando Gemini (gemini-2.0-flash-exp)...");
+    
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiApiKey}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: prompt,
+                },
+              ],
+            },
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            topP: 0.8,
+            topK: 40,
+            maxOutputTokens: 1024,
+          },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("[AI Service] ❌ Gemini Error:", response.status, errorData);
+      
+      // Tenta com gemini-1.5-flash como fallback
+      if (response.status === 404) {
+        console.log("[AI Service] 🔄 Tentando gemini-1.5-flash como fallback...");
+        return await callGeminiFallback(prompt);
+      }
+      return null;
+    }
+
+    const data = await response.json();
+    const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (content) {
+      console.log("[AI Service] ✅ Gemini respondeu com sucesso!");
+      return content;
+    } else {
+      console.warn("[AI Service] ⚠️ Gemini retornou resposta vazia");
+      return null;
+    }
+  } catch (error: any) {
+    console.error("[AI Service] ❌ Erro ao chamar Gemini:", error.message);
+    return null;
+  }
+}
+
+/**
+ * Fallback para gemini-1.5-flash
+ */
+async function callGeminiFallback(prompt: string): Promise<string | null> {
+  if (!geminiApiKey) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: prompt,
+                },
+              ],
+            },
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            topP: 0.8,
+            topK: 40,
+            maxOutputTokens: 1024,
+          },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      console.error("[AI Service] ❌ Gemini Fallback Error:", response.status);
+      return null;
+    }
+
+    const data = await response.json();
+    const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (content) {
+      console.log("[AI Service] ✅ Gemini Fallback respondeu com sucesso!");
+      return content;
+    }
+    return null;
+  } catch (error: any) {
+    console.error("[AI Service] ❌ Erro no Gemini Fallback:", error.message);
+    return null;
+  }
+}
+
+/**
+ * Obtém análise estratégica da IA
+ * Tenta Groq primeiro, depois Gemini como fallback
+ */
+export const getAdaptiveAdvice = async (prompt: string): Promise<string> => {
+  console.log("[AI Service] ========== INICIANDO REQUISIÇÃO DE IA ==========");
+
+  // Tenta Groq primeiro (mais rápido e gratuito)
+  if (groqApiKey) {
+    const groqResponse = await callGroqAPI(prompt);
+    if (groqResponse) {
+      return groqResponse;
+    }
   }
 
   // Fallback: Tenta Gemini
-  if (geminiClient) {
-    try {
-      console.log("[AI Service] 🔄 Tentando Gemini com modelo gemini-1.5-flash...");
-      
-      // Usa getGenerativeModel com a nomenclatura correta
-      const model = geminiClient.getGenerativeModel({
-        model: "gemini-1.5-flash", // Nome correto do modelo
-      });
-
-      console.log("[AI Service] Enviando prompt para Gemini...");
-      const result = await model.generateContent({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: prompt }],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.7,
-          topP: 0.8,
-          topK: 40,
-          maxOutputTokens: 1024,
-        },
-      });
-
-      const response = await result.response;
-      const text = response.text();
-
-      if (text) {
-        console.log("[AI Service] ✅ Gemini respondeu com sucesso!");
-        return text;
-      } else {
-        console.warn("[AI Service] ⚠️ Gemini retornou resposta vazia");
-      }
-    } catch (geminiError: any) {
-      console.error("[AI Service] ❌ Erro no Gemini:", geminiError.message || geminiError);
-      console.error("[AI Service] Stack:", geminiError.stack);
-      
-      // Se for erro 404 de modelo, tenta com gemini-pro como último recurso
-      if (geminiError.message?.includes("404") || geminiError.message?.includes("not found")) {
-        console.log("[AI Service] 🔄 Tentando fallback com gemini-pro...");
-        try {
-          const fallbackModel = geminiClient.getGenerativeModel({
-            model: "gemini-pro",
-          });
-          const fallbackResult = await fallbackModel.generateContent(prompt);
-          const fallbackResponse = await fallbackResult.response;
-          const fallbackText = fallbackResponse.text();
-          
-          if (fallbackText) {
-            console.log("[AI Service] ✅ Gemini Pro respondeu com sucesso!");
-            return fallbackText;
-          }
-        } catch (fallbackError: any) {
-          console.error("[AI Service] ❌ Erro no Gemini Pro:", fallbackError.message || fallbackError);
-        }
-      }
+  if (geminiApiKey) {
+    const geminiResponse = await callGeminiAPI(prompt);
+    if (geminiResponse) {
+      return geminiResponse;
     }
-  } else {
-    console.warn("[AI Service] ⚠️ Gemini Client não inicializado (chave ausente)");
   }
 
-  // Se ambas falharem, retorna mensagem de erro
-  if (!groqClient && !geminiClient) {
-    const errorMsg = "Erro: Nenhuma chave de API foi configurada. Configure VITE_GROQ_API_KEY ou VITE_GEMINI_API_KEY no Vercel.";
-    console.error("[AI Service] " + errorMsg);
-    return errorMsg;
-  }
-
-  const fallbackMsg = "O Coach está processando... Tente novamente em alguns segundos.";
-  console.warn("[AI Service] " + fallbackMsg);
-  return fallbackMsg;
+  // Se ambas falharem
+  const errorMsg = groqApiKey || geminiApiKey
+    ? "O Coach está processando... Tente novamente em alguns segundos."
+    : "Erro: Nenhuma chave de API foi configurada. Configure VITE_GROQ_API_KEY ou VITE_GEMINI_API_KEY no Vercel.";
+  
+  console.error("[AI Service] " + errorMsg);
+  return errorMsg;
 };
 
 /**
  * Verifica qual API está disponível
  */
 export const getAvailableAI = (): string => {
-  if (groqClient) return "Groq (Ultrarrápido)";
-  if (geminiClient) return "Gemini (Fallback)";
+  if (groqApiKey) return "Groq (Ultrarrápido)";
+  if (geminiApiKey) return "Gemini (Fallback)";
   return "Nenhuma API configurada";
 };
