@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import { Menu, X, Home, Brain, Swords, Users, Shield, Calculator, Clock, Zap, Target } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import './styles/elite.css';
@@ -15,6 +15,21 @@ import MetaRoadmap from './components/MetaRoadmap';
 
 type View = 'home' | 'coach' | 'draft' | 'teamcomp' | 'adaptive' | 'builder' | 'live' | 'runes' | 'meta';
 
+interface NavigationContextType {
+  activeView: View;
+  setActiveView: (view: View) => void;
+}
+
+const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
+
+export const useNavigation = () => {
+  const context = useContext(NavigationContext);
+  if (!context) {
+    throw new Error('useNavigation must be used within NavigationProvider');
+  }
+  return context;
+};
+
 const MENU_ITEMS: { id: View; label: string; icon: React.ReactNode }[] = [
   { id: 'home', label: 'Home', icon: <Home size={20} /> },
   { id: 'coach', label: 'Coach', icon: <Brain size={20} /> },
@@ -27,8 +42,8 @@ const MENU_ITEMS: { id: View; label: string; icon: React.ReactNode }[] = [
   { id: 'meta', label: 'Meta', icon: <Target size={20} /> },
 ];
 
-export default function App() {
-  const [activeView, setActiveView] = useState<View>('home');
+function AppContent() {
+  const { activeView, setActiveView } = useNavigation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleMenuClick = (view: View) => {
@@ -59,13 +74,14 @@ export default function App() {
           whileTap={{ scale: 0.95 }}
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="p-2 hover:bg-[#1a1f2e] rounded-lg transition-colors lg:hidden"
+          aria-label="Toggle menu"
         >
           {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
         </motion.button>
 
         <h1 className="text-lg font-bold tracking-tight hidden sm:block">SOBERBA</h1>
 
-        <div className="text-xs text-[#6b7280]">v3.8</div>
+        <div className="text-xs text-[#6b7280]">v3.9</div>
       </header>
 
       {/* MAIN LAYOUT */}
@@ -145,5 +161,15 @@ export default function App() {
         ))}
       </nav>
     </div>
+  );
+}
+
+export default function App() {
+  const [activeView, setActiveView] = useState<View>('home');
+
+  return (
+    <NavigationContext.Provider value={{ activeView, setActiveView }}>
+      <AppContent />
+    </NavigationContext.Provider>
   );
 }

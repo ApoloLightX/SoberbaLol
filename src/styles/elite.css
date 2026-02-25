@@ -29,7 +29,10 @@
 html, body {
   width: 100%;
   height: 100%;
+  height: 100dvh;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -320,6 +323,14 @@ nav.bottom-nav button.active {
 }
 
 @media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+  
+  h1 { font-size: 24px; }
+  h2 { font-size: 20px; }
+  h3 { font-size: 16px; }
+  
   header {
     height: 48px;
     padding: 0 12px;
@@ -332,6 +343,10 @@ nav.bottom-nav button.active {
   main {
     padding: 12px;
     padding-bottom: 76px;
+  }
+  
+  .grid {
+    gap: 12px;
   }
   
   .grid-2, .grid-3, .grid-4 {
@@ -349,9 +364,21 @@ nav.bottom-nav button.active {
     font-size: 16px;
     min-height: 40px;
   }
+  
+  .card {
+    padding: 12px;
+  }
 }
 
 @media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h1 { font-size: 20px; }
+  h2 { font-size: 16px; }
+  h3 { font-size: 14px; }
+  
   header {
     height: 44px;
     padding: 0 12px;
@@ -366,12 +393,28 @@ nav.bottom-nav button.active {
     padding-bottom: 72px;
   }
   
+  .grid {
+    gap: 8px;
+  }
+  
   .card {
     padding: 12px;
   }
   
   .glass-panel {
     padding: 12px;
+  }
+  
+  button {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-height: 40px;
+  }
+  
+  input, select, textarea {
+    padding: 8px 12px;
+    font-size: 16px;
+    min-height: 40px;
   }
 }
 

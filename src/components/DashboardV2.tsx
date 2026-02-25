@@ -1,11 +1,10 @@
 import React from 'react';
 import { TrendingUp, Zap, Users, Shield, Brain, Swords, Clock, Target, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useNavigation } from '../App';
 
 export default function DashboardV2() {
-  const navigate = (view: string) => {
-    window.dispatchEvent(new CustomEvent('navigate', { detail: view }));
-  };
+  const { setActiveView } = useNavigation();
 
   const stats = [
     { label: 'Meta', value: 'Tanks', status: 'Estável', color: '#f59e0b' },
@@ -15,14 +14,14 @@ export default function DashboardV2() {
   ];
 
   const quickAccess = [
-    { id: 'coach', label: 'Coach IA', icon: Brain, desc: 'Análise' },
-    { id: 'draft', label: 'Draft', icon: Swords, desc: 'Simulador' },
-    { id: 'teamcomp', label: 'Comp', icon: Users, desc: 'Análise' },
-    { id: 'adaptive', label: 'Builds', icon: Shield, desc: 'Adaptativas' },
-    { id: 'builder', label: 'Calc', icon: TrendingUp, desc: 'Construtor' },
-    { id: 'live', label: 'Live', icon: Clock, desc: 'Assistente' },
-    { id: 'runes', label: 'Runes', icon: Zap, desc: 'Explorador' },
-    { id: 'meta', label: 'Meta', icon: Target, desc: 'Roadmap' },
+    { id: 'coach' as const, label: 'Coach IA', icon: Brain, desc: 'Análise' },
+    { id: 'draft' as const, label: 'Draft', icon: Swords, desc: 'Simulador' },
+    { id: 'teamcomp' as const, label: 'Comp', icon: Users, desc: 'Análise' },
+    { id: 'adaptive' as const, label: 'Builds', icon: Shield, desc: 'Adaptativas' },
+    { id: 'builder' as const, label: 'Calc', icon: TrendingUp, desc: 'Construtor' },
+    { id: 'live' as const, label: 'Live', icon: Clock, desc: 'Assistente' },
+    { id: 'runes' as const, label: 'Runes', icon: Zap, desc: 'Explorador' },
+    { id: 'meta' as const, label: 'Meta', icon: Target, desc: 'Roadmap' },
   ];
 
   return (
@@ -70,8 +69,8 @@ export default function DashboardV2() {
                 transition={{ delay: i * 0.03 }}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => navigate(item.id)}
-                className="card text-left hover:border-[#10b981] group"
+                onClick={() => setActiveView(item.id)}
+                className="card text-left hover:border-[#10b981] group cursor-pointer"
               >
                 <Icon size={24} className="mb-2 text-[#10b981]" />
                 <div className="font-medium text-sm">{item.label}</div>
@@ -144,7 +143,7 @@ export default function DashboardV2() {
             <motion.button
               whileHover={{ y: -1 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => navigate('coach')}
+              onClick={() => setActiveView('coach')}
               className="w-full mt-4 bg-[#10b981] text-white font-medium py-2 rounded-lg hover:bg-[#059669] transition-colors flex items-center justify-center gap-2"
             >
               Testar Análise
